@@ -53,15 +53,16 @@ public class PositionController {
             @RequestParam(value = "date", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        Instant dateInstant;
+        LocalDate queryDate;
         if (date == null) {
-            dateInstant = Instant.now();
+            queryDate = LocalDate.now();
         } else {
-            dateInstant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            queryDate = date;
         }
 
-        return positionService.getPositionsByDate(dateInstant);
+        return positionService.getPositionsByDate(queryDate);
     }
+
 
     @GetMapping("/{id}")
     public PositionDto getPositionById(@PathVariable Integer id) {

@@ -12,7 +12,7 @@ public interface PositionService {
 
     List<PositionDto> getAllPositions();
     PositionDto getPositionById(int id);
-    public List<PositionDto> getPositionsByDate(Instant date);
+    public List<PositionDto> getPositionsByDate(LocalDate date);
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,24 +61,29 @@ public class PositionServiceImpl implements PositionService {
     }
 
 
-    public List<PositionDto> getPositionsByDate(Instant date) {
+    public List<PositionDto> getPositionsByDate(LocalDate date) {
         List<Position> positions = positionRepository.findAll();
 
         return positions.stream()
                 .map(position -> {
                     List<Reservation> filteredReservations = position.getReservations().stream()
-                            .filter(reservation -> !date.isBefore(reservation.getDateDeb()) && !date.isAfter(reservation.getDateFin()))
-                            .collect(Collectors.toList());
+                            .filter(reservation -> {
+                                LocalDate dateDeb = reservation.getDateDeb().atZone(ZoneId.systemDefault()).toLocalDate();
+                                LocalDate dateFin = reservation.getDateFin().atZone(ZoneId.systemDefault()).toLocalDate();
+                                return !date.isBefore(dateDeb) && !date.isAfter(dateFin);
+                            })
+                            .toList();
 
                     PositionDto positionDto = convertToDto(position);
                     positionDto.setReservations(filteredReservations.stream()
-                            .map(reservationService::convertToDto) // Utilisation de la méthode de ReservationService
+                            .map(reservationService::convertToDto)
                             .collect(Collectors.toList()));
                     return positionDto;
                 })
                 .filter(positionDto -> !positionDto.getReservations().isEmpty())
                 .collect(Collectors.toList());
     }
+
 
 
 
