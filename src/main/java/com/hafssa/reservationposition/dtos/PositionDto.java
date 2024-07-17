@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * DTO for {@link com.hafssa.reservationposition.entities.Position}
@@ -15,9 +15,9 @@ public class PositionDto implements Serializable {
     @NotNull
     @Size(max = 45)
     private final String numero;
-    private final Set<ReservationDto> reservations;
+    private List<ReservationDto> reservations;
 
-    public PositionDto(Integer id, String numero, Set<ReservationDto> reservations) {
+    public PositionDto(Integer id, String numero, List<ReservationDto> reservations) {
         this.id = id;
         this.numero = numero;
         this.reservations = reservations;
@@ -31,7 +31,7 @@ public class PositionDto implements Serializable {
         return numero;
     }
 
-    public Set<ReservationDto> getReservations() {
+    public List<ReservationDto> getReservations() {
         return reservations;
     }
 
@@ -56,5 +56,9 @@ public class PositionDto implements Serializable {
                 "id = " + id + ", " +
                 "numero = " + numero + ", " +
                 "reservations = " + reservations + ")";
+    }
+
+    public void setReservations(List<ReservationDto> positionReservations) {
+        this.reservations = positionReservations;
     }
 }

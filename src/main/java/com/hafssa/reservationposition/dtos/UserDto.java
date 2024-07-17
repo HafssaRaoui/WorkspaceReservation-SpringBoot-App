@@ -28,18 +28,16 @@ public class UserDto implements Serializable {
     @Size(max = 45)
     @Email(message = "Incorrect email")
     private final String email;
-    @NotNull
-    @Size(max = 45)
-    private final String password;
 
-    public UserDto(Integer id, String matricule, String firstName, String lastName, String role, String email, String password) {
+
+    public UserDto(Integer id, String matricule, String firstName, String lastName, String role, String email) {
         this.id = id;
         this.matricule = matricule;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.email = email;
-        this.password = password;
+
     }
 
     public Integer getId() {
@@ -66,9 +64,7 @@ public class UserDto implements Serializable {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -80,13 +76,13 @@ public class UserDto implements Serializable {
                 Objects.equals(this.firstName, entity.firstName) &&
                 Objects.equals(this.lastName, entity.lastName) &&
                 Objects.equals(this.role, entity.role) &&
-                Objects.equals(this.email, entity.email) &&
-                Objects.equals(this.password, entity.password);
+                Objects.equals(this.email, entity.email) ;
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, matricule, firstName, lastName, role, email, password);
+        return Objects.hash(id, matricule, firstName, lastName, role, email);
     }
 
     @Override
@@ -97,7 +93,6 @@ public class UserDto implements Serializable {
                 "firstName = " + firstName + ", " +
                 "lastName = " + lastName + ", " +
                 "role = " + role + ", " +
-                "email = " + email + ", " +
-                "password = " + password + ")";
+                "email = " + email ;
     }
 }

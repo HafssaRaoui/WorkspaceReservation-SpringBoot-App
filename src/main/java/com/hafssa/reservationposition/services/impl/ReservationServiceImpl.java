@@ -1,17 +1,20 @@
 package com.hafssa.reservationposition.services.impl;
 
 
-import com.hafssa.reservationposition.dtos.PositionDto;
 import com.hafssa.reservationposition.dtos.ReservationDto;
-import com.hafssa.reservationposition.dtos.UserDto;
 import com.hafssa.reservationposition.entities.Position;
 import com.hafssa.reservationposition.entities.Reservation;
 import com.hafssa.reservationposition.entities.User;
+import com.hafssa.reservationposition.repositories.PositionRepository;
 import com.hafssa.reservationposition.repositories.ReservationRepository;
+import com.hafssa.reservationposition.repositories.UserRepository;
 import com.hafssa.reservationposition.services.ReservationService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private PositionRepository positionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
 
 
@@ -40,11 +50,31 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
+
         Reservation reservation = convertToEntity(reservationDto);
+
+
+        User user = userRepository.findById(reservationDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
+        Position position = positionRepository.findById(reservationDto.getPositionId())
+                .orElseThrow(() -> new IllegalArgumentException("Position not found"));
+
+
+        reservation.setUser(user);
+        reservation.setPosition(position);
+
+
         Reservation savedReservation = reservationRepository.save(reservation);
+
+
+
         return convertToDto(savedReservation);
     }
+
 
 
 
@@ -55,20 +85,23 @@ public class ReservationServiceImpl implements ReservationService {
             reservationRepository.deleteById(id);
         }
 
+
+    }
+
+    public List<ReservationDto> getReservationsByDate(Instant date) {
+        List<Reservation> reservations = reservationRepository.findByDateDeb(date);
+        return reservations.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 
 
-    private ReservationDto convertToDto(Reservation reservation) {
-          return new ReservationDto(
+    public ReservationDto convertToDto(Reservation reservation) {
+        return new ReservationDto(
                 reservation.getId(),
                 reservation.getDateDeb(),
                 reservation.getDateFin(),
-                new UserDto(reservation.getUser().getId(), reservation.getUser().getMatricule(),
-                        reservation.getUser().getFirstName(), reservation.getUser().getLastName(),
-                        reservation.getUser().getRole(), reservation.getUser().getEmail(),
-                        reservation.getUser().getPassword()),
-                new PositionDto(reservation.getPosition().getId(), reservation.getPosition().getNumero(), null)
+                reservation.getUser().getId(),
+                reservation.getPosition().getId()
         );
     }
 
@@ -79,9 +112,9 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setDateDeb(reservationDto.getDateDeb());
         reservation.setDateFin(reservationDto.getDateFin());
         reservation.setUser(new User());
-        reservation.getUser().setId(reservationDto.getUser().getId());
+        reservation.getUser().setId(reservationDto.getUserId());
         reservation.setPosition(new Position());
-        reservation.getPosition().setId(reservationDto.getPosition().getId());
+        reservation.getPosition().setId(reservationDto.getPositionId());
         return reservation;
     }
 

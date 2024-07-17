@@ -1,10 +1,13 @@
 package com.hafssa.reservationposition.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,8 +23,11 @@ public class Position {
     @Column(name = "numero", nullable = false, length = 45)
     private String numero;
 
-    @OneToMany(mappedBy = "position")
-    private Set<Reservation> reservations = new LinkedHashSet<>();
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "position", orphanRemoval = true)
+    private List<Reservation> reservations;
+
 
     public Integer getId() {
         return id;
@@ -39,12 +45,19 @@ public class Position {
         this.numero = numero;
     }
 
-    public Set<Reservation> getReservations() {
+    public List<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Set<Reservation> reservations) {
+    public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+
+
+    public void removeReservation(Reservation reservation) {
+        this.reservations.remove(reservation);
+        reservation.setPosition(null);
     }
 
 }

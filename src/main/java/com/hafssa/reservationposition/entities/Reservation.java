@@ -27,9 +27,14 @@ public class Reservation {
     private User user;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "Position_id", nullable = false)
     private Position position;
+
+
+
+
+
 
     public Integer getId() {
         return id;
@@ -39,7 +44,7 @@ public class Reservation {
         this.id = id;
     }
 
-    public Instant getDateDeb() {
+    public @NotNull Instant getDateDeb() {
         return dateDeb;
     }
 
@@ -47,7 +52,7 @@ public class Reservation {
         this.dateDeb = dateDeb;
     }
 
-    public Instant getDateFin() {
+    public @NotNull Instant getDateFin() {
         return dateFin;
     }
 
