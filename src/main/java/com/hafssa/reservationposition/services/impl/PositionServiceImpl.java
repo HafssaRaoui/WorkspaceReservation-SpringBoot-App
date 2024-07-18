@@ -80,7 +80,7 @@ public class PositionServiceImpl implements PositionService {
                             .collect(Collectors.toList()));
                     return positionDto;
                 })
-                .filter(positionDto -> !positionDto.getReservations().isEmpty())
+
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +96,10 @@ public class PositionServiceImpl implements PositionService {
                             reservation.getDateDeb(),
                             reservation.getDateFin(),
                             reservation.getUser().getId(),
-                            reservation.getPosition().getId()))
+                            reservation.getPosition().getId(),
+                            reservation.getUser().getFirstName(),
+                            reservation.getUser().getLastName()
+                            ))
                     .collect(Collectors.toList());
         }
 

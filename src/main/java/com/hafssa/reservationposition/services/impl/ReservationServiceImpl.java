@@ -101,8 +101,10 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getDateDeb(),
                 reservation.getDateFin(),
                 reservation.getUser().getId(),
-                reservation.getPosition().getId()
-        );
+                reservation.getPosition().getId(),
+                reservation.getUser().getFirstName(),
+                reservation.getUser().getLastName());
+
     }
 
 

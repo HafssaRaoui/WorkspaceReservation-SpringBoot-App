@@ -15,12 +15,18 @@ public class ReservationDto implements Serializable {
     private final Integer userId;
     @NotNull
     private final Integer positionId;
+    @NotNull
+    private final String first_name;
+    @NotNull
+    private final String last_name;
 
-    public ReservationDto(Integer id, Instant dateDeb, Instant dateFin, Integer userId, Integer positionId) {
+    public ReservationDto(Integer id, Instant dateDeb, Instant dateFin, Integer userId, Integer positionId, String first_name,String last_name) {
         this.id = id;
         this.dateDeb = dateDeb;
         this.dateFin = dateFin;
         this.userId = userId;
+        this.first_name=first_name;
+        this.last_name=last_name;
         this.positionId = positionId;
     }
 
@@ -34,8 +40,16 @@ public class ReservationDto implements Serializable {
         return dateDeb;
     }
 
+    public @NotNull String getFirst_name() {
+        return first_name;
+    }
+
     public Instant getDateFin() {
         return dateFin;
+    }
+
+    public @NotNull String getLast_name() {
+        return last_name;
     }
 
     public Integer getUserId() {
