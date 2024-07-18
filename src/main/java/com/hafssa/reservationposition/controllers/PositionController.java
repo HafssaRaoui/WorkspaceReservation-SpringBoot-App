@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/positions")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PositionController {
 
     @Autowired
