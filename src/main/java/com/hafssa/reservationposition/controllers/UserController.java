@@ -5,11 +5,14 @@ import com.hafssa.reservationposition.dtos.UserDto;
 import com.hafssa.reservationposition.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.hafssa.reservationposition.entities.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+
+@RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:56578")
 public class UserController {
 
@@ -29,6 +32,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
+    }
 
 
 

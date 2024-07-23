@@ -5,6 +5,7 @@ import com.hafssa.reservationposition.entities.User;
 import com.hafssa.reservationposition.repositories.UserRepository;
 import com.hafssa.reservationposition.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -37,5 +40,14 @@ public class UserServiceImpl implements UserService {
 
     private UserDto convertToDto(User user) {
         return new UserDto(user.getId(), user.getMatricule(), user.getFirstName(), user.getLastName(), user.getRole(), user.getEmail());
+    }
+
+    public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
