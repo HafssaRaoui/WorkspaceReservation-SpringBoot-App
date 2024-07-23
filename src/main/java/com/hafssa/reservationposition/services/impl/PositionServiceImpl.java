@@ -1,5 +1,6 @@
 package com.hafssa.reservationposition.services.impl;
 
+import com.hafssa.reservationposition.dtos.OccupancyDto;
 import com.hafssa.reservationposition.dtos.PositionDto;
 import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Position;
@@ -83,6 +84,13 @@ public class PositionServiceImpl implements PositionService {
 
                 .collect(Collectors.toList());
     }
+
+
+
+
+
+
+
 
 
 

@@ -35,6 +35,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
+
+
+
     @Override
     public List<ReservationDto> getAllReservations() {
         return reservationRepository.findAll().stream()
@@ -88,10 +91,21 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+
     public List<ReservationDto> getReservationsByDate(Instant date) {
         List<Reservation> reservations = reservationRepository.findByDateDeb(date);
         return reservations.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Object[]> getOccupancyForNextTwoWeeks() {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(14);
+        long totalPositions = positionRepository.count();
+        return reservationRepository.findOccupancyRateByDateRange(startDate, endDate, totalPositions);
+    }
+
 
 
 
@@ -106,6 +120,10 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getUser().getLastName());
 
     }
+
+
+
+
 
 
 

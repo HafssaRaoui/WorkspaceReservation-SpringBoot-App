@@ -1,6 +1,7 @@
 package com.hafssa.reservationposition.services;
 
 
+import com.hafssa.reservationposition.dtos.OccupancyDto;
 import com.hafssa.reservationposition.dtos.PositionDto;
 import com.hafssa.reservationposition.entities.Reservation;
 

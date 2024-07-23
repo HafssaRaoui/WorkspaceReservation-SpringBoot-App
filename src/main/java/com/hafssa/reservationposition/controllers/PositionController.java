@@ -1,5 +1,6 @@
 package com.hafssa.reservationposition.controllers;
 
+import com.hafssa.reservationposition.dtos.OccupancyDto;
 import com.hafssa.reservationposition.dtos.PositionDto;
 import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Reservation;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/positions")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:56578")
 public class PositionController {
 
     @Autowired
@@ -33,20 +34,6 @@ public class PositionController {
     public List<PositionDto> getAllPositions() {
         return positionService.getAllPositions();
     }
-
-/*
-    @GetMapping("/{date}") // format date à préciser Y-m-d"
-    public List<PositionDto> getAllPositionsStatus(@PathVariable String date) {
-        List <PositionDto> positions = positionService.getAllPositions();
-        Instant dateconverted = new Date(date).toInstant();
-
-        /
-        List<ReservationDto> reservations=  reservationService.getPositionByDate(dateconverted);
-
-        // parcourir les reservations et pour chaque position trouvée lui ajouter l'objet reservation correspondant.
-        // retourner l'objet positions.
-    }
-*/
 
 
     @GetMapping("/reserved")
@@ -63,6 +50,9 @@ public class PositionController {
 
         return positionService.getPositionsByDate(queryDate);
     }
+
+
+
 
 
     @GetMapping("/{id}")

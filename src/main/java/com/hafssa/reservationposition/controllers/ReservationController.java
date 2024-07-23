@@ -10,11 +10,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:56578")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
+
+
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
@@ -39,6 +41,21 @@ public class ReservationController {
         reservationService.deleteReservation(id);
     }
 
+   /* @GetMapping("/occupancy")
+    public List<Object[]> getOccupancyForNextTwoWeeks() {
+        return reservationService.getOccupancyForNextTwoWeeks();
+    }*/
 
+/*
+    @GetMapping("/sendOccupancyReport")
+    public String sendOccupancyReport(@RequestParam String toEmail) {
+        // Retrieve the occupancy data
+        Map<LocalDate, Double> occupancyMap = (Map<LocalDate, Double>) reservationService.getOccupancyForNextTwoWeeks(); // Implement this method to return Map<LocalDate, Double>
+
+        // Send the email
+        emailOccupancyService.generateAndSendOccupancyEmail(occupancyMap, toEmail, "Occupancy Report");
+
+        return "Occupancy report sent to " + toEmail;
+    }*/
 
 }
