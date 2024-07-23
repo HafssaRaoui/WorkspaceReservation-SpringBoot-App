@@ -1,5 +1,7 @@
 package com.hafssa.reservationposition.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,13 +21,15 @@ public class Position {
     private Integer id;
 
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "numero", nullable = false, length = 45)
     private String numero;
 
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "position", orphanRemoval = true)
+    @JsonBackReference
+    @JsonIgnore
     private List<Reservation> reservations;
 
 

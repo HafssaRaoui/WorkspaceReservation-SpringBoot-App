@@ -5,7 +5,6 @@ import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Reservation;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -21,4 +20,5 @@ public interface ReservationService {
     public ReservationDto convertToDto(Reservation reservation);
 
 
+    Reservation save(Reservation reservation);
 }

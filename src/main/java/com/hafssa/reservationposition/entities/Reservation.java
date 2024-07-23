@@ -1,5 +1,6 @@
 package com.hafssa.reservationposition.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,22 +14,23 @@ public class Reservation {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotNull
+
     @Column(name = "date_deb", nullable = false)
     private Instant dateDeb;
 
-    @NotNull
+
     @Column(name = "date_fin", nullable = false)
     private Instant dateFin;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "User_id", nullable = false)
     private User user;
 
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "Position_id", nullable = false)
+    @JsonManagedReference
     private Position position;
 
 
@@ -76,4 +78,21 @@ public class Reservation {
         this.position = position;
     }
 
+    public void setUserId(Integer userId) {
+        if (this.user == null) {
+            this.user = new User(); // Initialize user if it is null
+        }
+        this.user.setId(userId);
+    }
+    public void setPositionId(Integer positionId) {
+        this.position.setId(positionId);
+    }
+
+    public Integer getUserId() {
+        return  this.getUser().getId();
+    }
+
+    public Integer getPositionId() {
+        return  this.getPosition().getId();
+    }
 }

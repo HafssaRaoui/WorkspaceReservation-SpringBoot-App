@@ -1,5 +1,6 @@
 package com.hafssa.reservationposition.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -17,39 +18,41 @@ public class User {
     private Integer id;
 
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "matricule", nullable = false, length = 45)
     private String matricule;
 
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;
 
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "last_name", nullable = false, length = 45)
     private String lastName;
 
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "role", nullable = false, length = 45)
     private String role;
 
     @Email(message = "Incorrect email")
     @Size(max = 45)
-    @NotNull
+
     @Column(name = "email", nullable = false, unique = true, length = 45)
     private String email;
 
     @Size(max = 255)
     @NotNull
+
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Superior_id", nullable = false)
+    @JsonIgnore
     private User superior;
 
     @OneToMany(mappedBy = "user")

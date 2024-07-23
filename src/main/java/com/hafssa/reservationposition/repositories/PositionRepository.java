@@ -13,4 +13,5 @@ import java.util.List;
 
 public interface PositionRepository extends JpaRepository<Position, Integer> {
 
+    Position findByNumero(String numero);
 }

@@ -12,19 +12,19 @@ import java.util.Objects;
  */
 public class UserDto implements Serializable {
     private final Integer id;
-    @NotNull
+
     @Size(max = 45)
     private final String matricule;
-    @NotNull
+
     @Size(max = 45)
     private final String firstName;
-    @NotNull
+
     @Size(max = 45)
     private final String lastName;
-    @NotNull
+
     @Size(max = 45)
     private final String role;
-    @NotNull
+
     @Size(max = 45)
     @Email(message = "Incorrect email")
     private final String email;

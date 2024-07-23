@@ -1,55 +1,74 @@
 package com.hafssa.reservationposition.dtos;
 
-import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.chrono.ChronoLocalDate;
 
 public class ReservationDto implements Serializable {
-    private final Integer id;
-    @NotNull
-    private final Instant dateDeb;
-    @NotNull
-    private final Instant dateFin;
-    @NotNull
-    private final Integer userId;
-    @NotNull
-    private final Integer positionId;
-    @NotNull
-    private final String first_name;
-    @NotNull
-    private final String last_name;
 
-    public ReservationDto(Integer id, Instant dateDeb, Instant dateFin, Integer userId, Integer positionId, String first_name,String last_name) {
-        this.id = id;
-        this.dateDeb = dateDeb;
-        this.dateFin = dateFin;
-        this.userId = userId;
-        this.first_name=first_name;
-        this.last_name=last_name;
-        this.positionId = positionId;
+
+    private  Instant dateDeb;
+
+    private  Instant dateFin;
+
+
+    private  Integer userId;
+
+    private  Integer positionId;
+
+    private  String positionNumero;
+
+    private  String firstName;
+
+    private  String lastName;
+    public ReservationDto() {
     }
 
 
-
-    public Integer getId() {
-        return id;
+    public ReservationDto( Instant dateDeb, Instant dateFin, Integer id1, Integer id2,String firstName,String lastName,String numero) {
+        this.dateDeb=dateDeb;
+        this.dateFin=dateFin;
+        this.userId=id1;
+        this.positionId=id2;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.positionNumero=numero;
     }
+
+public ReservationDto(Integer id, Instant dateDeb, Instant dateFin, Integer userId, Integer positionId, String first_name,String last_name) {
+
+    this.dateDeb = dateDeb;
+    this.dateFin = dateFin;
+    this.userId = userId;
+    this.positionId = positionId;
+}
+
 
     public Instant getDateDeb() {
         return dateDeb;
     }
 
-    public @NotNull String getFirst_name() {
-        return first_name;
-    }
+
 
     public Instant getDateFin() {
         return dateFin;
     }
 
-    public @NotNull String getLast_name() {
-        return last_name;
+
+
+    public  String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName( String firstName) {
+        this.firstName = firstName;
+    }
+
+    public  String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName( String lastName) {
+        this.lastName = lastName;
     }
 
     public Integer getUserId() {
@@ -60,4 +79,43 @@ public class ReservationDto implements Serializable {
         return positionId;
     }
 
+
+
+    public void setDateDeb( Instant dateDeb) {
+        this.dateDeb = dateDeb;
+    }
+
+    public void setDateFin( Instant dateFin) {
+        this.dateFin = dateFin;
+    }
+
+
+    public void setUserId( Integer userId) {
+        this.userId = userId;
+    }
+
+    public void setPositionId( Integer positionId) {
+        this.positionId = positionId;
+    }
+
+    public  String getPositionNumero() {
+        return positionNumero;
+    }
+
+    public void setPositionNumero( String positionNumero) {
+        this.positionNumero = positionNumero;
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationDto{" +
+                "dateDeb=" + dateDeb +
+                ", dateFin=" + dateFin +
+                ", userId=" + userId +
+                ", positionId=" + positionId +
+                ", positionNumero='" + positionNumero + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

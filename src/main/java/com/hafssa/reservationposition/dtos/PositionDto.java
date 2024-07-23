@@ -11,8 +11,9 @@ import java.util.Objects;
  * DTO for {@link com.hafssa.reservationposition.entities.Position}
  */
 public class PositionDto implements Serializable {
-    private final Integer id;
     @NotNull
+    private final Integer id;
+
     @Size(max = 45)
     private final String numero;
     private List<ReservationDto> reservations;

@@ -1,6 +1,5 @@
 package com.hafssa.reservationposition.services.impl;
 
-import com.hafssa.reservationposition.dtos.OccupancyDto;
 import com.hafssa.reservationposition.dtos.PositionDto;
 import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Position;
@@ -12,7 +11,6 @@ import com.hafssa.reservationposition.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -81,7 +79,6 @@ public class PositionServiceImpl implements PositionService {
                             .collect(Collectors.toList()));
                     return positionDto;
                 })
-
                 .collect(Collectors.toList());
     }
 
@@ -114,7 +111,9 @@ public class PositionServiceImpl implements PositionService {
         return new PositionDto(position.getId(), position.getNumero(), reservationDtos);
     }
 
+    public Position findByNumero(String numero) {
+        return positionRepository.findByNumero(numero);
+    }
 
 
-
-}
+    }

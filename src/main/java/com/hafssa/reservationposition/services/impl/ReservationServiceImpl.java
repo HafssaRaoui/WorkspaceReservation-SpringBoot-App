@@ -121,6 +121,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
+    }
 
 
 
