@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserService {
     List <UserDto> getAllUsers();
     UserDto getUserById(int id);
-    public User createUser(User user);
+    /*public User createUser(User user);*/
     public User findByEmail(String email);
 }

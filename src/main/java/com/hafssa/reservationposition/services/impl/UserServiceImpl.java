@@ -19,8 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -42,10 +41,10 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user.getId(), user.getMatricule(), user.getFirstName(), user.getLastName(), user.getRole(), user.getEmail());
     }
 
-    public User createUser(User user) {
+   /* public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
-    }
+    }*/
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
