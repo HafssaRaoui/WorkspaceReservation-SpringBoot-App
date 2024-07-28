@@ -97,13 +97,13 @@ public class PositionServiceImpl implements PositionService {
         if (position.getReservations() != null) {
             reservationDtos = position.getReservations().stream()
                     .map(reservation -> new ReservationDto(
-                            reservation.getId(),
                             reservation.getDateDeb(),
                             reservation.getDateFin(),
                             reservation.getUser().getId(),
                             reservation.getPosition().getId(),
                             reservation.getUser().getFirstName(),
-                            reservation.getUser().getLastName()
+                            reservation.getUser().getLastName(),
+                            reservation.getPosition().getNumero()
                             ))
                     .collect(Collectors.toList());
         }

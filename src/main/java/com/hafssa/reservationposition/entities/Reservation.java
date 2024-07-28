@@ -66,6 +66,7 @@ public class Reservation {
         return user;
     }
 
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -84,10 +85,28 @@ public class Reservation {
         }
         this.user.setId(userId);
     }
+    public void setUserFirstName(String userFirstName) {
+        if (this.user == null) {
+            this.user = new User(); // Initialize user if it is null
+        }
+        this.user.setFirstName(userFirstName);
+    }
+    public void setUserLastName(String userLastName) {
+        if (this.user == null) {
+            this.user = new User(); // Initialize user if it is null
+        }
+        this.user.setLastName(userLastName);
+    }
     public void setPositionId(Integer positionId) {
         this.position.setId(positionId);
     }
 
+    public String getUserFirstName() {
+        return  this.getUser().getFirstName();
+    }
+    public String getUserLastName() {
+        return  this.getUser().getLastName();
+    }
     public Integer getUserId() {
         return  this.getUser().getId();
     }

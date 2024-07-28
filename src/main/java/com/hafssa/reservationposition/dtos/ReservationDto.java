@@ -34,13 +34,7 @@ public class ReservationDto implements Serializable {
         this.positionNumero=numero;
     }
 
-public ReservationDto(Integer id, Instant dateDeb, Instant dateFin, Integer userId, Integer positionId, String first_name,String last_name) {
 
-    this.dateDeb = dateDeb;
-    this.dateFin = dateFin;
-    this.userId = userId;
-    this.positionId = positionId;
-}
 
 
     public Instant getDateDeb() {

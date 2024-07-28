@@ -65,10 +65,13 @@ public class ReservationController {
 
             User user = new User();
             user.setId(reservationDto.getUserId());
+            user.setFirstName(reservationDto.getFirstName());  // Ajoutez ces lignes
+            user.setLastName(reservationDto.getLastName());
             reservation.setUser(user);
 
             Position position = new Position();
             position.setId(reservationDto.getPositionId());
+            position.setNumero(reservationDto.getPositionNumero());
             reservation.setPosition(position);
 
 

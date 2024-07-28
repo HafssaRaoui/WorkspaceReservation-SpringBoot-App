@@ -9,6 +9,7 @@ import com.hafssa.reservationposition.repositories.PositionRepository;
 import com.hafssa.reservationposition.repositories.ReservationRepository;
 import com.hafssa.reservationposition.repositories.UserRepository;
 import com.hafssa.reservationposition.services.ReservationService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,27 +57,26 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
 
-        Reservation reservation = convertToEntity(reservationDto);
-
-
+        // Trouver l'utilisateur et la position
         User user = userRepository.findById(reservationDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
 
         Position position = positionRepository.findById(reservationDto.getPositionId())
                 .orElseThrow(() -> new IllegalArgumentException("Position not found"));
 
+        // Annuler la réservation existante de l'utilisateur
+        cancelExistingReservation(user);
 
+        // Créer la nouvelle réservation
+        Reservation reservation = convertToEntity(reservationDto);
         reservation.setUser(user);
         reservation.setPosition(position);
 
-
         Reservation savedReservation = reservationRepository.save(reservation);
-
-
 
         return convertToDto(savedReservation);
     }
+
 
 
 
@@ -111,19 +111,39 @@ public class ReservationServiceImpl implements ReservationService {
 
     public ReservationDto convertToDto(Reservation reservation) {
         return new ReservationDto(
-                reservation.getId(),
                 reservation.getDateDeb(),
                 reservation.getDateFin(),
                 reservation.getUser().getId(),
                 reservation.getPosition().getId(),
                 reservation.getUser().getFirstName(),
-                reservation.getUser().getLastName());
+                reservation.getUser().getLastName(),
+                reservation.getPosition().getNumero());
 
     }
 
-    @Override
+    @Transactional
     public Reservation save(Reservation reservation) {
-        return reservationRepository.save(reservation);
+        // Vérifier et récupérer l'utilisateur
+        User user = userRepository.findById(reservation.getUser().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+
+        // Mettre à jour les informations de l'utilisateur si nécessaire
+        user.setFirstName(reservation.getUser().getFirstName());
+        user.setLastName(reservation.getUser().getLastName());
+        user = userRepository.save(user);
+
+        // Vérifier et récupérer la position
+        Position position = positionRepository.findById(reservation.getPosition().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Position non trouvée"));
+
+        // Créer et sauvegarder la réservation
+        Reservation newReservation = new Reservation();
+        newReservation.setDateDeb(reservation.getDateDeb());
+        newReservation.setDateFin(reservation.getDateFin());
+        newReservation.setUser(user);
+        newReservation.setPosition(position);
+
+        return reservationRepository.save(newReservation);
     }
 
 
@@ -143,6 +163,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
+    @Transactional
+    public void cancelExistingReservation(User user) {
+        // Trouver la réservation existante de l'utilisateur
+        Reservation existingReservation = reservationRepository.findByUser(user)
+                .orElse(null);
+
+        if (existingReservation != null) {
+            // Annuler la réservation existante
+            reservationRepository.delete(existingReservation);
+        }
+    }
 
 
 }
