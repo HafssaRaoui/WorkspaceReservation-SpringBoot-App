@@ -1,6 +1,5 @@
 package com.hafssa.reservationposition.services.impl;
 
-
 import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Position;
 import com.hafssa.reservationposition.entities.Reservation;
@@ -9,6 +8,7 @@ import com.hafssa.reservationposition.repositories.PositionRepository;
 import com.hafssa.reservationposition.repositories.ReservationRepository;
 import com.hafssa.reservationposition.repositories.UserRepository;
 import com.hafssa.reservationposition.services.ReservationService;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
-
 public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
@@ -32,12 +30,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private UserRepository userRepository;
-
-
-
-
-
-
 
     @Override
     public List<ReservationDto> getAllReservations() {
@@ -56,7 +48,6 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
-
         // Trouver l'utilisateur et la position
         User user = userRepository.findById(reservationDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -64,8 +55,12 @@ public class ReservationServiceImpl implements ReservationService {
         Position position = positionRepository.findById(reservationDto.getPositionId())
                 .orElseThrow(() -> new IllegalArgumentException("Position not found"));
 
-        // Annuler la réservation existante de l'utilisateur
-        cancelExistingReservation(user);
+        // Annuler la réservation existante de l'utilisateur pour la même date
+        cancelExistingReservationForDate(user, reservationDto.getDateDeb());
+
+        List<Reservation> remainingReservations = reservationRepository.findByUserAndDateDebDate(user, reservationDto.getDateDeb());
+        System.out.println("Réservations restantes après suppression : " + remainingReservations.size());
+
 
         // Créer la nouvelle réservation
         Reservation reservation = convertToEntity(reservationDto);
@@ -77,22 +72,14 @@ public class ReservationServiceImpl implements ReservationService {
         return convertToDto(savedReservation);
     }
 
-
-
-
-
-
     @Override
     public void deleteReservation(int id) {
         if (reservationRepository.existsById(id)) {
             reservationRepository.deleteById(id);
         }
-
-
     }
 
     @Override
-
     public List<ReservationDto> getReservationsByDate(Instant date) {
         List<Reservation> reservations = reservationRepository.findByDateDeb(date);
         return reservations.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -106,9 +93,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findOccupancyRateByDateRange(startDate, endDate, totalPositions);
     }
 
-
-
-
     public ReservationDto convertToDto(Reservation reservation) {
         return new ReservationDto(
                 reservation.getDateDeb(),
@@ -118,7 +102,6 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getUser().getFirstName(),
                 reservation.getUser().getLastName(),
                 reservation.getPosition().getNumero());
-
     }
 
     @Transactional
@@ -146,11 +129,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(newReservation);
     }
 
-
-
-
-
-
     private Reservation convertToEntity(ReservationDto reservationDto) {
         Reservation reservation = new Reservation();
         reservation.setDateDeb(reservationDto.getDateDeb());
@@ -162,18 +140,19 @@ public class ReservationServiceImpl implements ReservationService {
         return reservation;
     }
 
+    @Autowired
+    private EntityManager entityManager;
 
     @Transactional
-    public void cancelExistingReservation(User user) {
-        // Trouver la réservation existante de l'utilisateur
-        Reservation existingReservation = reservationRepository.findByUser(user)
-                .orElse(null);
+    public void cancelExistingReservationForDate(User user, Instant reservationDate) {
+        System.out.println("Tentative de suppression des réservations pour l'utilisateur ID: " + user.getId() + " à la date: " + reservationDate);
 
-        if (existingReservation != null) {
-            // Annuler la réservation existante
-            reservationRepository.delete(existingReservation);
-        }
+        int deletedCount = entityManager.createQuery(
+                        "DELETE FROM Reservation r WHERE r.user = :user AND DATE(r.dateDeb) = DATE(:reservationDate)")
+                .setParameter("user", user)
+                .setParameter("reservationDate", reservationDate)
+                .executeUpdate();
+
+        System.out.println("Nombre de réservations supprimées : " + deletedCount);
     }
-
-
 }

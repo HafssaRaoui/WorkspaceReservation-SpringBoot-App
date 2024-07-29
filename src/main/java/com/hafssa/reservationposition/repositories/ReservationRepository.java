@@ -22,4 +22,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Object[]> findOccupancyRateByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("totalPositions") long totalPositions);
 
     Optional<Reservation> findByUser(User user);
+
+    @Query("SELECT r FROM Reservation r WHERE r.user = :user AND DATE(r.dateDeb) = DATE(:dateDeb)")
+    List<Reservation> findByUserAndDateDebDate(@Param("user") User user, @Param("dateDeb") Instant dateDeb);
+
 }

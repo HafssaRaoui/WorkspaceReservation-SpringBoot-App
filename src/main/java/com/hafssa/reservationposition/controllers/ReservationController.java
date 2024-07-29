@@ -10,13 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @RestController
 @RequestMapping("/reservations")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
     @Autowired
     private ReservationService reservationService;
     private Position position;
@@ -49,7 +51,7 @@ public class ReservationController {
     public ResponseEntity<?> reserve(@RequestBody ReservationDto reservationDto) {
         try {
             // Log les données reçues pour vérifier le format
-            System.out.println("Received reservation request: " + reservationDto);
+            logger.info("Received reservation request: {}", reservationDto);
 
             if (reservationDto.getDateDeb() == null || reservationDto.getDateFin() == null ||
                     reservationDto.getUserId() == null || reservationDto.getPositionId() == null ||
@@ -58,32 +60,14 @@ public class ReservationController {
                 return ResponseEntity.badRequest().body("Données invalides fournies.");
             }
 
-
-            Reservation reservation = new Reservation();
-            reservation.setDateDeb(reservationDto.getDateDeb());
-            reservation.setDateFin(reservationDto.getDateFin());
-
-            User user = new User();
-            user.setId(reservationDto.getUserId());
-            user.setFirstName(reservationDto.getFirstName());  // Ajoutez ces lignes
-            user.setLastName(reservationDto.getLastName());
-            reservation.setUser(user);
-
-            Position position = new Position();
-            position.setId(reservationDto.getPositionId());
-            position.setNumero(reservationDto.getPositionNumero());
-            reservation.setPosition(position);
-
-
-            reservationService.save(reservation);
-
+            // Utiliser la méthode createReservation du service au lieu de save
+            ReservationDto createdReservation = reservationService.createReservation(reservationDto);
+            logger.info("Reservation created successfully");
             return ResponseEntity.ok(new SuccessResponse("Réservation créée avec succès !"));
         } catch (IllegalArgumentException e) {
-
             System.err.println("Error processing reservation: " + e.getMessage());
             return ResponseEntity.badRequest().body("Données invalides fournies.");
         } catch (Exception e) {
-
             System.err.println("Unexpected error: " + e.getMessage());
             return ResponseEntity.status(500).body("Une erreur inattendue est survenue.");
         }

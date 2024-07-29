@@ -31,13 +31,12 @@ public class UserController {
 
         return userService.getUserById(id);
     }
-/*
-    @PostMapping("/register")
+
+  /*  @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }*/
-
 
 
 
