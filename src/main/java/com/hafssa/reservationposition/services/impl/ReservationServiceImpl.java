@@ -55,14 +55,14 @@ public class ReservationServiceImpl implements ReservationService {
         Position position = positionRepository.findById(reservationDto.getPositionId())
                 .orElseThrow(() -> new IllegalArgumentException("Position not found"));
 
-        // Annuler la rÃ©servation existante de l'utilisateur pour la mÃªme date
+        // Annuler la réservation existante de l'utilisateur pour la même date
         cancelExistingReservationForDate(user, reservationDto.getDateDeb());
 
         List<Reservation> remainingReservations = reservationRepository.findByUserAndDateDebDate(user, reservationDto.getDateDeb());
-        System.out.println("RÃ©servations restantes aprÃ¨s suppression : " + remainingReservations.size());
+        System.out.println("Réservations restantes après suppression : " + remainingReservations.size());
 
 
-        // CrÃ©er la nouvelle rÃ©servation
+        // Créer la nouvelle réservation
         Reservation reservation = convertToEntity(reservationDto);
         reservation.setUser(user);
         reservation.setPosition(position);
@@ -101,25 +101,27 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getPosition().getId(),
                 reservation.getUser().getFirstName(),
                 reservation.getUser().getLastName(),
-                reservation.getPosition().getNumero());
+                reservation.getPosition().getNumero()
+        );
+
     }
 
     @Transactional
     public Reservation save(Reservation reservation) {
-        // VÃ©rifier et rÃ©cupÃ©rer l'utilisateur
+        // Vérifier et récupérer l'utilisateur
         User user = userRepository.findById(reservation.getUser().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvÃ©"));
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
 
-        // Mettre Ã  jour les informations de l'utilisateur si nÃ©cessaire
+        // Mettre à jour les informations de l'utilisateur si nécessaire
         user.setFirstName(reservation.getUser().getFirstName());
         user.setLastName(reservation.getUser().getLastName());
         user = userRepository.save(user);
 
-        // VÃ©rifier et rÃ©cupÃ©rer la position
+        // Vérifier et récupérer la position
         Position position = positionRepository.findById(reservation.getPosition().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Position non trouvÃ©e"));
+                .orElseThrow(() -> new EntityNotFoundException("Position non trouvée"));
 
-        // CrÃ©er et sauvegarder la rÃ©servation
+        // Créer et sauvegarder la réservation
         Reservation newReservation = new Reservation();
         newReservation.setDateDeb(reservation.getDateDeb());
         newReservation.setDateFin(reservation.getDateFin());
@@ -145,7 +147,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     public void cancelExistingReservationForDate(User user, Instant reservationDate) {
-        System.out.println("Tentative de suppression des rÃ©servations pour l'utilisateur ID: " + user.getId() + " Ã  la date: " + reservationDate);
+        System.out.println("Tentative de suppression des réservations pour l'utilisateur ID: " + user.getId() + " à la date: " + reservationDate);
 
         int deletedCount = entityManager.createQuery(
                         "DELETE FROM Reservation r WHERE r.user = :user AND DATE(r.dateDeb) = DATE(:reservationDate)")
@@ -153,6 +155,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .setParameter("reservationDate", reservationDate)
                 .executeUpdate();
 
-        System.out.println("Nombre de rÃ©servations supprimÃ©es : " + deletedCount);
+        System.out.println("Nombre de réservations supprimées : " + deletedCount);
     }
 }

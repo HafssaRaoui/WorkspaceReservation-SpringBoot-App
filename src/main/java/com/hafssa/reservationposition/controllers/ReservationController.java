@@ -50,6 +50,8 @@ public class ReservationController {
     @PostMapping("/reserve")
     public ResponseEntity<?> reserve(@RequestBody ReservationDto reservationDto) {
         try {
+            //getUser ;
+            //reservation.setUserID
             // Log les données reçues pour vérifier le format
             logger.info("Received reservation request: {}", reservationDto);
 
