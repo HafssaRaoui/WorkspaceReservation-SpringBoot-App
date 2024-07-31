@@ -3,6 +3,7 @@ package com.hafssa.reservationposition.services;
 
 import com.hafssa.reservationposition.dtos.ReservationDto;
 import com.hafssa.reservationposition.entities.Reservation;
+import com.hafssa.reservationposition.entities.User;
 
 import java.time.Instant;
 import java.util.List;

@@ -31,6 +31,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private UserRepository userRepository;
 
+
+
+
+
     @Override
     public List<ReservationDto> getAllReservations() {
         return reservationRepository.findAll().stream()
@@ -71,6 +75,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         return convertToDto(savedReservation);
     }
+
+
+
+
 
     @Override
     public void deleteReservation(int id) {

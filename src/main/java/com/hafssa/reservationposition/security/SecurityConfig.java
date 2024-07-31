@@ -1,6 +1,7 @@
 package com.hafssa.reservationposition.security;
 
 
+import com.hafssa.reservationposition.services.CustomUserDetailsService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,14 +38,11 @@ public class SecurityConfig {
 
 
     @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        PasswordEncoder passwordEncoder = passwordEncoder();
-        return new InMemoryUserDetailsManager(
-                User.withUsername("hafssaraoui@gmail.com").password(passwordEncoder.encode("password")).authorities("USER","ADMIN").build(),
-                User.withUsername("mariamlakhssassi@gmail.com").password(passwordEncoder.encode("password")).authorities("USER","ADMIN").build(),
-                User.withUsername("yasminesalhi@gmail.com").password(passwordEncoder.encode("password")).authorities("USER","ADMIN").build()
-        );
+    public UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
     }
+
+
 
 
     @Bean
